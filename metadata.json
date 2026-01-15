@@ -1,0 +1,8 @@
+{
+  "name": "video v3",
+  "description": "Một ứng dụng chuyên nghiệp giúp tạo kịch bản, nhân vật và prompt hình ảnh/video cho các nội dung Shorts (Bán hàng, Drama, Kể chuyện) sử dụng sức mạnh của Gemini AI.",
+  "requestFramePermissions": [
+    "camera",
+    "microphone"
+  ]
+}
