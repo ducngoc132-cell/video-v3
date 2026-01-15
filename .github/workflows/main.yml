@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <title>AI Shorts Video Generator (Gemini)</title>
+  <style>
+    body {
+      background: #0f0f0f;
+      color: #fff;
+      font-family: Arial, sans-serif;
+      max-width: 900px;
+      margin: auto;
+      padding: 20px;
+    }
+    h1 { color: #ffcc00; }
+    textarea, select, button {
+      width: 100%;
+      margin-top: 12px;
+      padding: 12px;
+      font-size: 16px;
+      border-radius: 6px;
+      border: none;
+    }
+    button {
+      background: #ffcc00;
+      font-weight: bold;
+      cursor: pointer;
+    }
+    .output {
+      margin-top: 20px;
+      background: #1e1e1e;
+      padding: 16px;
+      border-radius: 8px;
+      white-space: pre-wrap;
+    }
+  </style>
+</head>
+<body>
+
+<h1>🎬 AI TẠO VIDEO SHORTS (Gemini)</h1>
+
+<textarea id="topic" rows="3" placeholder="Nhập chủ đề video Shorts..."></textarea>
+
+<select id="voice">
+  <option value="bán hàng">Giọng bán hàng</option>
+  <option value="drama">Giọng drama</option>
+  <option value="kể chuyện">Giọng kể chuyện</option>
+</select>
+
+<button onclick="runGemini()">🚀 TẠO VIDEO SHORTS</button>
+
+<div id="result" class="output">⏳ Chờ AI xử lý...</div>
+
+<script>
+const API_KEY = "DÁN_API_KEY_GEMINI_TẠI_ĐÂY";
+
+async function runGemini() {
+  const topic = document.getElementById("topic").value;
+  const voice = document.getElementById("voice").value;
+  const output = document.getElementById("result");
+
+  if (!topic) {
+    alert("Vui lòng nhập chủ đề!");
+    return;
+  }
+
+  output.innerText = "⏳ Gemini đang tạo nội dung...";
+
+  const prompt = `
+Bạn là AI chuyên tạo VIDEO SHORTS.
+
+GIỌNG: ${voice.toUpperCase()}
+CHỦ ĐỀ: ${topic}
+
+YÊU CẦU:
+1. Tạo 1 NHÂN VẬT CHÍNH DUY NHẤT (ngoại hình, trang phục, cảm xúc).
+2. Nhân vật phải giữ nguyên 100% xuyên suốt.
+3. Viết kịch bản Shorts (32–64 giây).
+4. Chia phân cảnh, mỗi cảnh 8 giây.
+5. Với mỗi cảnh:
+   - Hành động
+   - Prompt tạo ẢNH (9:16)
+   - Prompt tạo VIDEO (8s)
+6. Viết hoàn toàn bằng tiếng Việt.
+`;
+
+  try {
+    const res = await fetch(
+      "https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-pro:generateContent?key=" + API_KEY,
+      {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          contents: [
+            {
+              parts: [{ text: prompt }]
+            }
+          ]
+        })
+      }
+    );
+
+    const data = await res.json();
+    output.innerText = data.candidates[0].content.parts[0].text;
+
+  } catch (err) {
+    output.innerText = "❌ Lỗi: " + err.message;
+  }
+}
+</script>
+
+</body>
+</html>
